@@ -7,9 +7,10 @@ remap C-m to something not <return>
 use ido-mode
 
 * paging
-C-v: pgdn
-M-v: pgup
-C-l: zz, zt, zb
+C-v :: pgdn
+M-v :: pgup
+C-l :: zz, zt, zb
+M-r :: M, H, L
 
 * nav
 ** line
@@ -31,6 +32,8 @@ M-e: prev
 M-<: gg
 M->: G
 
+** join lines
+M-^ :: J
 * misc ctrl
 C-u: leader
 - C-u 10 C-n: move 10 lines
@@ -66,7 +69,7 @@ C-x 4 f :: find file in new window
 * frames
 C-x 5 :: frame prefix map
 C-x 5 o :: other frame
-* escapine
+* escaping
 C-g :: cancel cmd w/in editing level
 esc esc esc :: get out of recursive editing level ([ ] around major-mode)
 * getting help
@@ -89,3 +92,13 @@ C-x e :: execute macro
 C-M-a :: beg/prev defun
 C-M-e :: end/next defun
 C-M-h :: set region around defun
+** marks
+C-x r SPC :: set 'register' [single letter]
+C-x r l :: jump to register [letter]
+** matching paren/bracket/brace
+C-M-n :: next
+C-M-p :: prev
+** tags
+M-. :: push (follow)
+M-* :: pop (back)
+C-x 4 . :: follow other window

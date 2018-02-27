@@ -1,5 +1,35 @@
-#+NAME: global key mapping
+* global key mapping
 #+BEGIN_SRC emacs-lisp
   (global-set-key "\M-?" 'help-command)
   (global-set-key "\C-h" 'delete-backward-char)
+#+END_SRC
+
+* evaluating lisp expressions
+C-x C-e :: eval last sexp
+M-: :: eval expression
+*scratch* buffer
+- lisp interaction mode
+- C-j :: eval exp, print result
+
+* interactivity
+if fn is interactive, call (interactive)
+interactive takes string
+- 1 char per arg
+- p :: numeric, nil -> 1 when called interactively, nil -> nil non-interactive
+- P :: raw, nil->nil
+NOTE: (interactive "...") only affects args *when called interactively*
+so below, use raw "P" value and call prefix-numeric-value
+- nil -> 1 regardless of interactivity
+
+* window traversal
+#+BEGIN_SRC emacs-lisp
+  ;; remap default C-x o
+    (global-set-key "\C-x \C-n" 'other-window)
+  ;; define backward fn
+    (defun other-window-backward (&optional n)
+      "Move to previous window. Optionally move back n windows"
+      (interactive "P")
+      (other-window (- (prefix-numeric-value n))))
+  ;; map backward fn
+    (global-set-key "\C-x \C-p" 'other-window-backward)
 #+END_SRC
