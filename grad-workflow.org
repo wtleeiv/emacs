@@ -1,0 +1,30 @@
+* latex
+bibtex :: included biblio software
+- biblatex/biber :: latex integration
++ TODO: look into biblio/ref integration w/ emacs
+** emacs packages
+- auctex
+-  reftex
+** fonts
+xelatex :: easier fonts
+
+* stats
+ESS :: emacs speaks statistics
+- R related
+  - see if there's something similar for python
+
+* presentations
+beamer :: powerpoint in plain-text
+
+* repeatability
+literate programming w/ org-mode
+
+* version control
+git (w/ magit package)
+
+* backups
+google drive
+actual hard-drive backup
+- crash-plan
+- spider oak
+- backblaze

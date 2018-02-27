@@ -1,0 +1,5 @@
+#+NAME: global key mapping
+#+BEGIN_SRC emacs-lisp
+  (global-set-key "\M-?" 'help-command)
+  (global-set-key "\C-h" 'delete-backward-char)
+#+END_SRC

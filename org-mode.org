@@ -1,0 +1,29 @@
+tab :: cycle curr subtree
+S-tab :: global visibility cycling
+- num prefix :: show up to num depth
+
+* tree motion
+C-c C-n :: next node
+C-c C-p :: prev node
+
+C-c C-f :: next same-level
+C-c C-b :: prev same-level
+
+C-c C-u :: up level
+
+* global org keys
+TODO: make prefix (ex. "C-x o l")
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+#+END_SRC
+
+* enable org code execution [[https://orgmode.org/manual/Languages.html#Languages][like this]]
+#+BEGIN_SRC emacs-lisp
+  (require 'ob-lisp)
+  (require 'ob-python)
+#+END_SRC
+bookmark: 2.5 structure editing

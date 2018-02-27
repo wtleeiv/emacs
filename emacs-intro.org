@@ -1,0 +1,91 @@
+_emacs 101_
+
+smooth scrolling: no pg jump
+look up all commands w/ given prefix (C-x -> ?)
+C-u 0 C-l: zt
+remap C-m to something not <return>
+use ido-mode
+
+* paging
+C-v: pgdn
+M-v: pgup
+C-l: zz, zt, zb
+
+* nav
+** line
+C-n: j
+C-p: k
+** char
+C-f: l
+C-b: h
+** word
+M-f: w, e (w/in word)
+M-b: b
+** beg/end of line
+C-a: 0
+C-e: $
+** sentence
+M-a: next
+M-e: prev
+** beg/EOF
+M-<: gg
+M->: G
+
+* misc ctrl
+C-u: leader
+- C-u 10 C-n: move 10 lines
+C-g: cancel command
+
+* dired
+C-x C-f :: open (& edit) new file (as usual)
++ :: new dir
+g :: update dired knowledge
+d :: mark for del
+x :: delete files marked w/ d
+D :: immediately delete file
+! :: run shell cmd on file
+C :: copy (enter new name in minibuffer)
+m :: mark multiple things
+u :: unmark file
+U :: unmark all files
+t :: toggle marks
+i :: show subdir
+R :: mv/rename
+*-/ :: mark all dirs (see mode info for more things...)
+A :: regexp search marked files!
+C-x C-q :: make dired editable! (bulk renames, etc)
+~ :: mark backup files for deletion
+* auto-fill
+line-break at fill-column
+C-x f :: set fill-col (preface w/ C-u [num])
+M-q :: refill current paragraph
+* windows
+C-x 1: kill other windows (max curr win)
+C-x 4 :: window prefix map
+C-x 4 f :: find file in new window
+* frames
+C-x 5 :: frame prefix map
+C-x 5 o :: other frame
+* escapine
+C-g :: cancel cmd w/in editing level
+esc esc esc :: get out of recursive editing level ([ ] around major-mode)
+* getting help
+C-h c :: simple key info
+C-h k :: detailed key info
+C-h f :: fn info
+C-h v :: var info
+C-h m :: major-mode info
+C-h b :: all keybindings info
+C-h a :: apropos (search) anything
+C-h i :: info top-level
+C-h r :: info emacs
+
+* macros
+C-x ( :: start macro
+C-x ) :: finish macro
+C-x e :: execute macro
+* code nav
+** defuns
+C-M-a :: beg/prev defun
+C-M-e :: end/next defun
+C-M-h :: set region around defun
