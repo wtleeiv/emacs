@@ -1,8 +1,15 @@
+bookmark :: TODO items
+* trees
+C-c C-x v :: copy visible region
+C-c ^ :: sort
+C-c * :: toggle heading
+
+** cycling
 tab :: cycle curr subtree
 S-tab :: global visibility cycling
 - num prefix :: show up to num depth
 
-* tree motion
+** motion
 C-c C-n :: next node
 C-c C-p :: prev node
 
@@ -10,6 +17,33 @@ C-c C-f :: next same-level
 C-c C-b :: prev same-level
 
 C-c C-u :: up level
+
+** structure editing
+M-RET :: new heading, item, row
+C-RET :: new heading after curr subtree
+
+M-left :: promote heading
+M-right :: demote heading
+
+M-S-left :: promote subtree
+M-S-right :: demote subtree
+
+M-up :: move subtree up (w/in curr level)
+M-down :: move subtree down (w/in curr level)
+
+*** marking (highlighting)
+M-h :: mark element (repeatable)
+C-c @ :: mark subtree
+
+** narrowing
+only show portion of file
+C-x n s :: narrow to subtree
+C-x n w :: widen
+
+** sparse trees
+only show nodes matching something interesting
+C-c / :: select sparse tree
+C-c / / :: sparse tree regex search
 
 * global org keys
 TODO: make prefix (ex. "C-x o l")
@@ -26,4 +60,78 @@ TODO: make prefix (ex. "C-x o l")
   (require 'ob-lisp)
   (require 'ob-python)
 #+END_SRC
-bookmark: 2.5 structure editing
+
+* lists
+thing :: description
+unordered :: -, +
+ordered :: 1. 1)
+tree structure command similar for lists
+- sorting works too
+C-c - :: cycle list style
+[ ] :: checkbox
+C-c C-c :: toggle checkbox
+* drawers
+usually hidden text
+C-c C-x d :: insert drawer
+C-c z :: add timestamp log entry w/in drawer
+* footnotes
+C-c C-x f :: footnote command
+- jump between ref and def
+- create new footnote
+- call w/ prefix
+  - sort
+  - renumber
+  - delete
+C-c C-c :: just jump between ref and def
+C-c ' :: edit footnote def in window
+- like code block editing
+
+* orgstruct-mode
+org-like editing minor mode
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'message-mode-hook 'turn-on-orgstruct)
+  (add-hook 'message-mode-hook 'turn-on-orgstruct++)
+#+END_SRC
+orgstruct-heading-prefix-regexp :: fold in any file
+- ex. ";; " fold headings in lisp comments
+* tables
+C-c | :: create table
+- new or from region
+- should figure out TSV, CSV
+- regex col sep possible
+C-c C-c :: align table
+C-c SPC :: clear field
+TAB :: align, move next field
+- create row if applicable
+M-a :: prev field
+M-e :: next field
+
+M-up/down :: move row up/down
+M-left/right :: move col left/right
+
+M-S-up/left :: kill row/col
+M-S-down/right :: new row/col
+
+C-c RET :: insert hor line below and move down
+C-c - :: insert hor line
+C-c ^ :: sort
+
+** col groups
+export w/ vert lines
+/ :: single col
+< :: specify beginnings
+
+** spreadsheet
+use calc or elisp!!
+learn if needed someday
+* hyperlinks
+[[link][description]] or just [[link]]
+C-c C-l :: insert/edit link
+- from stored-links or new one
+C-c C-o :: follow link
+org-link-abbrev-list :: map name to link
++ potentially useful for website integration
+#+LINK: name path
+- file-specific link abbrevs
+append double-colon '::' to path to find w/in page
+*headline :: only search headlines

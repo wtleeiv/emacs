@@ -33,3 +33,11 @@ so below, use raw "P" value and call prefix-numeric-value
   ;; map backward fn
     (global-set-key "\C-x \C-p" 'other-window-backward)
 #+END_SRC
+* hooks
+hook :: list of fns to exec when applicable
+(add-hook 'hook-name 'fn-name)
+
+* advice
+run before/after fn
+like clos methods, but for fns
+(defadvice ...)
