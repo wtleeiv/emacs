@@ -102,3 +102,7 @@ C-M-p :: prev
 M-. :: push (follow)
 M-* :: pop (back)
 C-x 4 . :: follow other window
+* buffers
+M-x occur :: regexp search buffer
+M-x multi-occur :: search a bunch of buffers
+- good for project finding
