@@ -1,4 +1,14 @@
-bookmark :: TODO items
+bookmark :: 6.3 tag heirarchy
+* vivibility uses
+1) TODO
+   + high vis
+   + coupled w/ tree heirarchy
+2) tag
+   + med vis
+   + non-heirarchal grouping
+3) property/drawers
+   + pretty much invisible (tab to open/close)
+   + mod enclosing tree
 * trees
 C-c C-x v :: copy visible region
 C-c ^ :: sort
@@ -52,6 +62,7 @@ TODO: make prefix (ex. "C-x o l")
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
+;; maybe not useful
 (global-set-key "\C-cb" 'org-iswitchb)
 #+END_SRC
 
@@ -135,3 +146,41 @@ org-link-abbrev-list :: map name to link
 - file-specific link abbrevs
 append double-colon '::' to path to find w/in page
 *headline :: only search headlines
+* TODOs
+write TODO at beginning of *header*
+S-left/right :: cycle todo state
+- also C-c C-t
+C-c a t :: global todo list (via agenda binding)
+org-todo-keywords :: list possible TODO states
+- customize flow, multiple flows, type groups (home/work, etc)
+  - set faces for each...
+organize todos in tree format (dependencies)
+use checkboxes [ ] and frac [/] or percent [%] in header to track
+- C-c # or C-c C-c on cookie :: update count
+** tracking
+track state change
+- org-log-done
+** habits
++ potentially cool
+- schedule repeating
+- graph history
+** proiorities
+useful for sorting
+- B is default (unmarked)
+C-c , :: set/remove priority
+S-up/down :: cycle priority
+
+* tags
+subtree subject matter
++ *non-heirarchical* grouping
+  + couple w/ tree heirarchy
+searchable
+groupable (agenda, etc)
+C-c C-q OR C-c C-c on headline :: set tags
+
+
+* TODO [0/0] learn how to use TODOs
+** second thing
+** jhello
+** first thing
+** [ ] hello again

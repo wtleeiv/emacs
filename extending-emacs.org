@@ -1,3 +1,6 @@
+note to self:
+(setq fill-column (min 80 (floor (/ (window-total-width) 2))))
+or use (window-body-width)
 * global key mapping
 #+BEGIN_SRC emacs-lisp
   (global-set-key "\M-?" 'help-command)
