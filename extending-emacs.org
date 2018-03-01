@@ -1,6 +1,19 @@
 note to self:
 (setq fill-column (min 80 (floor (/ (window-total-width) 2))))
 or use (window-body-width)
+
+perhaps remove literate emacs file
+- put config code in separate files
+- load with use-package and keep loading clean
+* universal packages to install
+** magit
+** company-mode
+completion
+** flycheck
+syntax
+* python
+** Anaconda-mode
+
 * global key mapping
 #+BEGIN_SRC emacs-lisp
   (global-set-key "\M-?" 'help-command)
