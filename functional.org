@@ -1,5 +1,5 @@
-* preface
-** functional programming aspects
+* Preface
+** Functional Programming Aspects
 - functions are first class
   - higher-order fns used often
 - recursion used heavily
@@ -10,7 +10,7 @@
   - evaluate fn and args over assign vars
 - *what* is computed over *how* to compute it
   - top-down vs bottom-up
-** potentially interesting libraries
+** Potentially Interesting Libraries
 - multipledispatch
   - covered a bit
 - pyrsistent
@@ -24,9 +24,9 @@
   - ala haskell's ~quickcheck~ library
 - more-itertools
   - even more iterator things
-* avoiding flow control
-** encapsulation
-*** imperative
+* Avoiding Flow Control
+** Encapsulation
+*** Imperative
 #+BEGIN_SRC python
   # initial state
   collection = get_initial_state()
@@ -44,7 +44,7 @@
   for thing in collection:
       process(thing)
 #+END_SRC
-*** functional
+*** Functional
 shift focus
 - how to create -> what is created
 #+BEGIN_SRC python
@@ -66,8 +66,8 @@ shift focus
   for thing in make_collection(data_set):
       process(thing)
 #+END_SRC
-** comprehension
-*** imperative
+** Comprehension
+*** Imperative
 #+BEGIN_SRC python
   collection = list()
   for datum in data_set:
@@ -77,15 +77,15 @@ shift focus
           new = modify(datum)
           colleciton.append(new)
 #+END_SRC
-*** functional
+*** Functional
 #+BEGIN_SRC python
   collection = [d if condition(d) else modify(d)
                 for d in data_set]
 #+END_SRC
-** generators
+** Generators
 lazy
 similar syntax to list comprehensions
-*** imperative
+*** Imperative
 #+BEGIN_SRC python
   def get_log_lines(log_file):
       line = read_line(log_file)
@@ -99,7 +99,7 @@ similar syntax to list comprehensions
 
   log_lines = get_log_lines(huge_log_file)
 #+END_SRC
-*** object-oriented
+*** Object-Oriented
 implement iterator interface
 - ~__iter__~ and ~__next__~
 #+BEGIN_SRC python
@@ -118,16 +118,136 @@ implement iterator interface
 
   log_lines = GetLogLines(huge_log_file)
 #+END_SRC
-*** functional
+*** Functional
 #+BEGIN_SRC python
   log_lines = (line for line in read_line(huge_log_file)
                if complex_condition(line))
 #+END_SRC
-** dicts and sets
+** Dicts and Sets
 use comprehensions like lists
 #+BEGIN_SRC python
   {i:chr(65+1) for i in range(6)}
 
   {chr(65+i) for i in range(6)}
 #+END_SRC
-** recursion
+** Recursion
+python lacks tail-call elimination
+eliminate recursion w/ higher-order fns
+- map, reduce, etc
+*** Factorial
+#+BEGIN_SRC python
+  from functools import reduce
+  from operator import mul
+
+  def factorial(n):
+      return reduce(mul, range(1, n+1), 1)
+#+END_SRC
+*** Quicksort
+#+BEGIN_SRC python
+  def quicksort(lst):
+      "quicksort a list"
+      if len(lst) == 0:
+          return lst
+      pivot = lst[0]
+      pivots = [x for x in lst if x == pivot]
+      smaller = quicksort([x for x in lst if x < pivot])
+      bigger = quicksort([x for x in lst if x > pivot])
+      return smaller + pivots + bigger
+#+END_SRC
+* Callables
+** Closures vs Callable Class Instances
+*** Object-Oriented
+mutable state
+#+BEGIN_SRC python
+  class Adder(object):
+      def __init__(self, n):
+          self.n = n
+      def __call__(self, m):
+          return self.n + m
+
+  add5 = Adder(5)
+  # mutable state
+  add5.n = 10
+#+END_SRC
+*** Functional
+lexical fn def possible in python!
+immutable
+#+BEGIN_SRC python
+  def Adder(n):
+      def add(m):
+          return n + m
+      return add
+
+  add5 = Adder(5)
+#+END_SRC
+*** Closure Shittiness
+in python, closure vars bound by *name*, not value :(
+watch
+#+BEGIN_SRC python
+  adders = [lambda m: m + n for n in range(5)]
+  return [adder(10) for adder in adders]
+#+END_SRC
+
+#+RESULTS:
+| 14 | 14 | 14 | 14 | 14 |
+damn
+*** Closure Band-Aid
+explicitly bind internal var via keyword
+stop binding by name
+#+BEGIN_SRC python
+    adders = [lambda m, n = n: m + n for n in range(5)]
+    return [adder(10) for adder in adders]
+#+END_SRC
+
+#+RESULTS:
+| 10 | 11 | 12 | 13 | 14 |
+yay!
+** Multiple Dispatch and Predicate Dispatch
+call methods based on object type
+- like in CLOS
+predicate dispatch extends this notion
+- call fn based on passing predicate conditions
+* Lazy Evaluation
+** functional stuff
+zip, map, filter, range
+all, any, min, max, sum, functools.reduce
+** chaining
+collections.ChainMap() is a thing too
+#+BEGIN_SRC python
+  from itertools import chain
+
+  def from_logs(fnames):
+      yield from (open(file) for file in fnames)
+
+  lines = chain.from_iterable(from_logs(
+      ['huge.log', 'giant.log']))
+#+END_SRC
+* Higher Order Functions
+map and filter can be made from reduce
+- I think I might remember this from /Learn You a Haskell/
+- anyways, it's sick
+** Common Higher Order Fns
+not included in python
+*** Composition
+#+BEGIN_SRC python
+  def compose(*funcs):
+      def composition(data, funcs=funcs):
+          result = data
+          for f in reversed(funcs):
+              result = f(result)
+          return result
+      return composition
+#+END_SRC
+*** All/Any Predictes
+#+BEGIN_SRC python
+  all_pred = lambda var, *preds: all(p(var) for p in preds)
+  any_pred = lambda var, *preds: any(p(var) for p in preds)
+#+END_SRC
+*** Currying
+functools.partial()
+note: import opertor module to get special fns
+- +, <<, *, etc
+*** Decorators
+just functions under the hood
+mark extra functionality
+- auto-cacheing, etc
