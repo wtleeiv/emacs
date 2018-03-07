@@ -1,0 +1,133 @@
+* preface
+** functional programming aspects
+- functions are first class
+  - higher-order fns used often
+- recursion used heavily
+- list processing takes central role
+  - recurse on sublists, etc
+- side-effects (external state) uncommon
+- expressions over statements
+  - evaluate fn and args over assign vars
+- *what* is computed over *how* to compute it
+  - top-down vs bottom-up
+** potentially interesting libraries
+- multipledispatch
+  - covered a bit
+- pyrsistent
+  - immutable collections
+- toolz
+  - functional library
+  - builds on ~itertools~ and ~functools~
+    - idk what those are...yet
+- hypothesis
+  - generate test data matching specification
+  - ala haskell's ~quickcheck~ library
+- more-itertools
+  - even more iterator things
+* avoiding flow control
+** encapsulation
+*** imperative
+#+BEGIN_SRC python
+  # initial state
+  collection = get_initial_state()
+  state_var = None
+  # configure data
+  for datum in data_set:
+      if condition(state_var):
+          state_var = calculate_from(datum)
+          new = modify(datum, state_var)
+          collection.add_to(new)
+      else:
+          new = modify_differently(datum)
+          collection.add_to(new)
+  # process data
+  for thing in collection:
+      process(thing)
+#+END_SRC
+*** functional
+shift focus
+- how to create -> what is created
+#+BEGIN_SRC python
+  # make in isolation
+  def make_collection(data_set):
+      collection = get_initial_state()
+      state_var = None
+
+      for datum in data_set:
+          if condition(state_var):
+              state_var = calculate_from(datum)
+              new = modify(datum, state_var)
+              collection.add_to(new)
+          else:
+              new = modify_differently(datum)
+              collection.add_to(new)
+      return collection
+  # then process
+  for thing in make_collection(data_set):
+      process(thing)
+#+END_SRC
+** comprehension
+*** imperative
+#+BEGIN_SRC python
+  collection = list()
+  for datum in data_set:
+      if condition(datum):
+          collection.append(datum)
+      else:
+          new = modify(datum)
+          colleciton.append(new)
+#+END_SRC
+*** functional
+#+BEGIN_SRC python
+  collection = [d if condition(d) else modify(d)
+                for d in data_set]
+#+END_SRC
+** generators
+lazy
+similar syntax to list comprehensions
+*** imperative
+#+BEGIN_SRC python
+  def get_log_lines(log_file):
+      line = read_line(log_file)
+      while True:
+          try:
+              if complex_condition(line):
+                  yield line # generative here
+              line = readline(log_file)
+          except StopIteration:
+              raise
+
+  log_lines = get_log_lines(huge_log_file)
+#+END_SRC
+*** object-oriented
+implement iterator interface
+- ~__iter__~ and ~__next__~
+#+BEGIN_SRC python
+  class GetLogLines(object):
+      def __init__(self, log_file):
+          self.log_file = log_file
+          self.line = None
+      def __iter__(self):
+          return self
+      def __next__(self):
+          if self.line is None:
+              self.line = read_line(log_file)
+          while not complex_condition(self.line):
+              self.line = read_line(self.log_file)
+          return self.line
+
+  log_lines = GetLogLines(huge_log_file)
+#+END_SRC
+*** functional
+#+BEGIN_SRC python
+  log_lines = (line for line in read_line(huge_log_file)
+               if complex_condition(line))
+#+END_SRC
+** dicts and sets
+use comprehensions like lists
+#+BEGIN_SRC python
+  {i:chr(65+1) for i in range(6)}
+
+  {chr(65+i) for i in range(6)}
+#+END_SRC
+** recursion
