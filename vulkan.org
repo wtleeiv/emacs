@@ -1,0 +1,17 @@
+* Vulkan in 30 Minutes
+** Random
+vulkan is a c api
+~VkAllocationCallbacks*~ :: custom memory management
++ pass NULL for default
+** First Steps
++ ~VkInstance~
+  + ~VkPhysicalDevice~
+    + ~VkDevice~
+*** Properties and Features
+~VkGetPhysicalDeviceProperties~
+~VkGetPhysicalDeviceFeatures~
+*** Common Setup
+vulkan setup is lengthy, but usually common
+~VkCreateInstance()~ -> ~VkEnumeratePhysicalDevices()~ -> ~VkCreateDevice()~
++ parallels heirarchy above
+** Images and Buffers

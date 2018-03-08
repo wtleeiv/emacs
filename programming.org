@@ -1,0 +1,19 @@
+* andy gavin
+keep projects *small*
+- 1-2 days
+keep iterating w/ small learning chunks
+read a bunch
+design before you code
+- data structures in mind
+test small bits at a time
+- all fns around one ds, etc
+- convince yourself each layer is solid
+  - then build on it
+always leave program in a running state
+- when tearing down and rebuilding, do it in one go
+** disciplines
+- algs/ds
+- compilers
+  - read a good book about it
+- hardware architecture
+  - can't be a master w/o some knowledge of it
