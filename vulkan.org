@@ -1,12 +1,19 @@
+* Questions
+? Vk vs vk prefix...typo or actually separate
+-> lowercase :: fn
+-> uppercase :: struct
+? what are vulkan extensions
 * Vulkan in 30 Minutes
 ** Random
 vulkan is a c api
 ~VkAllocationCallbacks*~ :: custom memory management
 + pass NULL for default
 ** First Steps
-+ ~VkInstance~
-  + ~VkPhysicalDevice~
-    + ~VkDevice~
+~VkInstance~ -> ~VkPhysicalDevice~ -> ~VkDevice~
+ask for num queues from each queue family on physicalDevice creation
+- render
+- compute
+enumerate queues w/ ~vkGetDeviceQueue()~
 *** Properties and Features
 ~VkGetPhysicalDeviceProperties~
 ~VkGetPhysicalDeviceFeatures~
@@ -15,3 +22,147 @@ vulkan setup is lengthy, but usually common
 ~VkCreateInstance()~ -> ~VkEnumeratePhysicalDevices()~ -> ~VkCreateDevice()~
 + parallels heirarchy above
 ** Images and Buffers
+~VkImage~
++ usage type :: bitfield (i think enum-esque)
++ tiling :: =LINEAR= or =OPTIMAL=
+  - image data memory layout...
+  - optimal :: only alloc to GPU (for speed)
+  - less visible to host
++ note: images arent used directly
+  - create ~VkImageView~ to view
+~VkBuffer~
++ raw memory block (often used directly)
++ if used as 'texel buffer' in a shader
+  - use ~VkBufferView~
+  - texel :: texture element (fundamental element of texture map)
+** Allocating GPU Memory
+*** Background
+must alloc mem to buffers and images before use
+~VkGetPhysicalDeviceMemoryProperties()~ :: show dev's mem
++ memory heap :: size
++ memory type :: properties
+CPU and GPU mem shown together
++ ex. two heaps
+  - system (CPU) RAM
+  - GPU RAM
+  - various mem types w/in both
+mem types
++ CPU visible or no
++ CPU/GPU coherent (shared)
++ cached/uncached
+- note: memory writes not always direct
+  - often cached under the hood, then flushed eventually
+    - limit mem accesses => less i/o wait time
+- in vulkan, you can control all these features
+*** Allocating Memory
+call ~vkAllocateMemory()~
++ takes ~VkDevice~ and description struct
+  - which heap, how much, properties
+return ~VkDeviceMemory~ handle (pointer prolly)
+~vkMapMemory()~ & ~vkUnmapMemory()~ :: mapping/unmapping memory is a thing
++ requires synchronization...
+** Binding Memory
+~vkGetBufferMemoryRequirements()~
+~vkGetImageMemoryRequirements()~
+report mem reqs for buffer/image
++ auto-accounts for padding, metadata, internal stuff
++ includes compatible mem type bitmask
+real-world considerations (deal w/ later)
++ limit total num allocs
+  - alloc large memory regions
+  - fill w/ many images/buffers
++ each page used for only buffers or images
+~vkBindBufferMemory()~
+~vkBindImageMemory()~
+must bind mem before using buffer/image
+bindings are immutable
++ prolly have to free/realloc for diff mem type...
+** Command Buffers
+~VkCommandPool~
++ alloc ~VkCommandBuffer~ from pool
++ one pool per thread
+  - allows more efficient allocation
+~vkAllocateCommandBuffers()~
+~vkFreeCommandBuffers()~
++ alloc and free buffers from pool
+~VkQueue~
++ submit command buffers to work queue
++ serial passing of work to gpu
++ each ~VkPhysicalDevice~ (above) can have queue families
+  - graphics-only
+  - *compute-only*
+    + simultaneous compute and render!
++ ~vkGetDeviceQueue()~ :: show devices command queues
++ multiple queues must be synchronized w/ eachother
+  - harder to deal w/ concurrent queues
+~vkQueueSubmit()~
+submut multiple command buffs to queue at once
+** Shaders & Pipeline State Objects (PSOs)
+~VkPipeline~
+has a shitload of internal state
+some parts can be dynamically set
++ viewport, etc (see spec for more)
+~vkCreateGraphicsPipelines()~
+choose what's dynamic
+rest populated from PSO creation info...??
+~VkPipelineCache~
+specify upon creation
+~vkGetPipelineCacheData()~
+call later, save pipeline to disk
+propopulate later, save PSO creation time
+~VkShaderModule~
+make a shader
+** Binding Model
+namespaces...
+~VkDescriptorSetLayout~ :: aka struct
+~VkDescriptorSet~ :: aka instance
+~VkDescriptorPool~
+alloc descriptor sets w/ particular set layout from a pool
+- pools allow more efficient allocation
+- each thread has one pool to alloc from
+  - fewer locks
+*** Making a Pipeline
+use many descSetLayout w/in ~VkPipelineLayout~
+in practice, instantiate matching descSet instances w/in pipeline
+- wordy, just specify what things will happen in pipeline, then create them
+** Synchronization
+some objects must be synchronized by hand (no internal locks)
+- VkQueues used by different threads, etc
+- recording/submitting commands
+~VkEvent~
+~VkSemaphore~
+~VkFence~
+used to sync stuff
+rtfm
+** Barriers
+ensure GPU event ordering
+~VkMemoryBarrier~
+~VkBufferMemoryBarrier~
+~VkImageMemoryBarrier~
+barriers take bitfield of mem access types
+specify what should be synced on either side of barrier
+barriers can also change image buffer layouts -> change usage
+*** Example
+~VkImageMemoryBarrier~
+srcAccessMask = ACCESS_COLOR_ATTACHMENT_WRITE
+dstAccessMask = ACCESS_SHADER_READ
++ color writing should finish before shader reads image data
+** Render Passes
+~VkRenderPass~ :: how rendering goes down
+can have subpasses
++ set depth, not color
++ then color later, etc
+subpasses are independent
++ no shared state
+*** Usage with Other Objects
+renderPass used with frameBuffers and pipelines
+when init either one, must say which *kind* of renderPass will be used
++ not specific, but must be compatible
+so as long as you know kinda how you want to render later,
+no need to create renderPass object before making frameBuffers or pipelines
+~VkFrameBuffer~
++ contains many ~VkImageViews~
+~VkPipeline~
+** Backbuffers & Presentation
+platform-specific
+note: native windowing possible, via extensions
